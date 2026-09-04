@@ -209,6 +209,18 @@ class ReplacePmdRuleTest implements RewriteTest {
     }
 
     @Test
+    void doNotChangeXmlWithoutRootElement() {
+        rewriteRun(
+          //language=xml
+          xml(
+            """
+              <!-- just a comment, no root element -->
+              """
+          )
+        );
+    }
+
+    @Test
     void doNotChangeNonRulesetXml() {
         rewriteRun(
           //language=xml
