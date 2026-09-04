@@ -3,10 +3,10 @@
 
 plugins {
     id("org.openrewrite.build.recipe-library") version "latest.release"
-    id("org.openrewrite.build.moderne-proprietary-license") version "latest.release"
+    id("org.openrewrite.build.moderne-source-available-license") version "latest.release"
 }
 
-group = "io.moderne.recipe"
+group = "org.openrewrite.recipe"
 description = "OpenRewrite recipes for managing PMD configuration."
 
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
@@ -16,6 +16,7 @@ dependencies {
 
     implementation(platform("org.openrewrite:rewrite-bom:${rewriteVersion}"))
     implementation("org.openrewrite:rewrite-java")
+    provided("org.openrewrite:rewrite-xml:${rewriteVersion}")
 
     annotationProcessor("org.openrewrite:rewrite-templating:${rewriteVersion}")
     implementation("org.openrewrite:rewrite-templating:${rewriteVersion}")
