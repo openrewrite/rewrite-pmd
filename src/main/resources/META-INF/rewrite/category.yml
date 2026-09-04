@@ -1,5 +1,5 @@
 ---
 type: specs.openrewrite.org/v1beta/category
-name: pmd
+name: PMD
 packageName: io.moderne.java.pmd
-description: Recipes for pmd.
+description: Recipes for managing PMD configuration.

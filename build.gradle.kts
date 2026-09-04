@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.moderne.recipe"
-description = "OpenRewrite recipes for pmd."
+description = "OpenRewrite recipes for managing PMD configuration."
 
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
 dependencies {
