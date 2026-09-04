@@ -62,7 +62,8 @@ public class ReplacePmdRule extends Recipe {
             @Override
             public Xml.Document visitDocument(Xml.Document document, ExecutionContext ctx) {
                 // Only PMD rulesets have the `<rule>` and `<exclude>` elements this recipe operates on
-                return "ruleset".equals(document.getRoot().getName()) ? super.visitDocument(document, ctx) : document;
+                Xml.Tag root = document.getRoot();
+                return root != null && "ruleset".equals(root.getName()) ? super.visitDocument(document, ctx) : document;
             }
 
             @Override

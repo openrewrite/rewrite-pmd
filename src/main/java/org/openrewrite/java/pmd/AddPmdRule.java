@@ -63,7 +63,7 @@ public class AddPmdRule extends Recipe {
             public Xml.Document visitDocument(Xml.Document document, ExecutionContext ctx) {
                 Xml.Tag root = document.getRoot();
                 // Only PMD rulesets have the `<rule>` elements this recipe operates on
-                if (!"ruleset".equals(root.getName())) {
+                if (root == null || !"ruleset".equals(root.getName())) {
                     return document;
                 }
 
