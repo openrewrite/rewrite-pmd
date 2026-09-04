@@ -1,0 +1,3 @@
+Convention type,Pattern,Example,Frequency,Scope
+naming,Test suffix for classes,RecipeLoadingTest,,project-wide
+naming,load* method naming pattern,loadRecipeFromFile,,project-wide
