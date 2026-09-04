@@ -15,7 +15,7 @@
 <div align="center">
 
 <!-- Keep the gap above this line, otherwise they won't render correctly! -->
-[![ci](https://github.com/moderneinc/rewrite-pmd/actions/workflows/ci.yml/badge.svg)](https://github.com/moderneinc/rewrite-pmd/actions/workflows/ci.yml)
+[![ci](https://github.com/openrewrite/rewrite-pmd/actions/workflows/ci.yml/badge.svg)](https://github.com/openrewrite/rewrite-pmd/actions/workflows/ci.yml)
 [![Contributing Guide](https://img.shields.io/badge/Contributing-Guide-informational)](https://github.com/openrewrite/.github/blob/main/CONTRIBUTING.md)
 </div>
 
