@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openrewrite.staticanalysis.pmd;
+package org.openrewrite.java.pmd;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -28,9 +28,9 @@ class ModernizePmdTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
         spec.recipe(Environment.builder()
-          .scanRuntimeClasspath("org.openrewrite.staticanalysis")
+          .scanRuntimeClasspath("org.openrewrite.java.pmd")
           .build()
-          .activateRecipes("org.openrewrite.staticanalysis.pmd.ModernizePmd"));
+          .activateRecipes("org.openrewrite.java.pmd.ModernizePmd"));
     }
 
     @DocumentExample

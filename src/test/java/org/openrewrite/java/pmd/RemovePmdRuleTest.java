@@ -13,40 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openrewrite.staticanalysis.pmd;
+package org.openrewrite.java.pmd;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.xml.Assertions.xml;
 
-class AddPmdRuleTest implements RewriteTest {
+class RemovePmdRuleTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new AddPmdRule("category/java/errorprone.xml/EmptyCatchBlock"));
+        spec.recipe(new RemovePmdRule("category/java/codestyle.xml/AvoidFinalLocalVariable"));
     }
 
     @DocumentExample
     @Test
-    void addRuleReference() {
+    void removeRuleReference() {
         rewriteRun(
           //language=xml
           xml(
             """
               <?xml version="1.0"?>
               <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
+                  <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable"/>
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
               </ruleset>
               """,
             """
               <?xml version="1.0"?>
               <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
-                  <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
               </ruleset>
               """
           )
@@ -54,64 +53,23 @@ class AddPmdRuleTest implements RewriteTest {
     }
 
     @Test
-    void addRuleToRulesetWithoutRules() {
+    void removeRuleReferenceWithNestedProperties() {
         rewriteRun(
           //language=xml
           xml(
             """
               <?xml version="1.0"?>
               <ruleset name="custom">
-                  <description>My rules</description>
-              </ruleset>
-              """,
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <description>My rules</description>
-                  <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
-              </ruleset>
-              """
-          )
-        );
-    }
-
-    @Test
-    void enableRuleByRemovingExclusion() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml">
-                      <exclude name="EmptyCatchBlock"/>
-                      <exclude name="MissingSerialVersionUID"/>
-                  </rule>
-              </ruleset>
-              """,
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml">
-                      <exclude name="MissingSerialVersionUID"/>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
-
-    @Test
-    void doNotChangeRulesetThatAlreadyReferencesRule() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml/EmptyCatchBlock">
+                  <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable">
                       <priority>2</priority>
                   </rule>
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+              </ruleset>
+              """,
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
               </ruleset>
               """
           )
@@ -119,15 +77,91 @@ class AddPmdRuleTest implements RewriteTest {
     }
 
     @Test
-    void doNotChangeRulesetThatReferencesWholeRulesetFile() {
+    void removeExclusion() {
         rewriteRun(
           //language=xml
           xml(
             """
               <?xml version="1.0"?>
               <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml">
-                      <exclude name="MissingSerialVersionUID"/>
+                  <rule ref="category/java/codestyle.xml">
+                      <exclude name="AvoidFinalLocalVariable"/>
+                      <exclude name="ShortVariable"/>
+                  </rule>
+              </ruleset>
+              """,
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml">
+                      <exclude name="ShortVariable"/>
+                  </rule>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void removeEveryReferenceInOneRuleset() {
+        rewriteRun(
+          //language=xml
+          xml(
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <!-- Local variables are better off final -->
+                  <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable"/>
+                  <rule ref="category/java/codestyle.xml">
+                      <exclude name="AvoidFinalLocalVariable"/>
+                  </rule>
+                  <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable">
+                      <priority>1</priority>
+                  </rule>
+              </ruleset>
+              """,
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml"/>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void removeByBareRuleName() {
+        rewriteRun(
+          spec -> spec.recipe(new RemovePmdRule("AvoidFinalLocalVariable")),
+          //language=xml
+          xml(
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="rulesets/java/mine.xml/AvoidFinalLocalVariable"/>
+              </ruleset>
+              """,
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void doNotRemoveWhenReferencedFromAnotherRuleset() {
+        rewriteRun(
+          //language=xml
+          xml(
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="rulesets/java/mine.xml/AvoidFinalLocalVariable"/>
+                  <rule ref="rulesets/java/mine.xml">
+                      <exclude name="AvoidFinalLocalVariable"/>
                   </rule>
               </ruleset>
               """
@@ -143,15 +177,10 @@ class AddPmdRuleTest implements RewriteTest {
             """
               <?xml version="1.0"?>
               <project>
-                  <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
+                  <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable"/>
               </project>
               """
           )
         );
-    }
-
-    @Test
-    void bareRuleNameIsInvalid() {
-        assertThat(new AddPmdRule("EmptyCatchBlock").validate().isValid()).isFalse();
     }
 }

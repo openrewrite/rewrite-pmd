@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openrewrite.staticanalysis.pmd;
+package org.openrewrite.java.pmd;
 
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.xml.tree.Xml;
