@@ -21,7 +21,9 @@
 
 ### What is this?
 
-This is a template repository for creating new OpenRewrite modules. It provides a starting point with the necessary structure and configuration to help you get started quickly.
+This module provides OpenRewrite recipes for managing [PMD](https://pmd.github.io/) configuration. PMD is a static source code analyzer that reports common programming flaws through configurable rulesets.
+
+These recipes help you automate the setup and maintenance of PMD across your codebases — adding and upgrading the PMD build plugins, managing rulesets, and keeping PMD configuration consistent.
 
 ### To do after generating your new module
 - [ ] Change the above description to reflect your module
