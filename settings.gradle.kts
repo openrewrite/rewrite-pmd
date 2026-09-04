@@ -16,4 +16,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "rewrite-module-template"
+rootProject.name = "rewrite-pmd"

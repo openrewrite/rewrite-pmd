@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.hierynomus.gradle.license.tasks.LicenseCheck
 
 plugins {
     id("org.openrewrite.build.recipe-library") version "latest.release"
@@ -8,7 +7,7 @@ plugins {
 }
 
 group = "io.moderne.recipe"
-description = "OpenRewrite recipes for %SAFE_NAME%."
+description = "OpenRewrite recipes for pmd."
 
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
 dependencies {
@@ -32,5 +31,3 @@ dependencies {
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-Arewrite.javaParserClasspathFrom=resources")
 }
-tasks.withType<Javadoc> { enabled = false }
-tasks.withType<LicenseCheck> { enabled = false }

@@ -1,5 +1,5 @@
 ---
 type: specs.openrewrite.org/v1beta/category
-name: %SAFE_NAME%
-packageName: io.moderne.java.%SAFE_NAME%
-description: Recipes for %SAFE_NAME%.
+name: pmd
+packageName: io.moderne.java.pmd
+description: Recipes for pmd.
