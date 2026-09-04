@@ -6,7 +6,7 @@ plugins {
     id("org.openrewrite.build.moderne-proprietary-license") version "latest.release"
 }
 
-group = "io.moderne.recipe"
+group = "org.openrewrite.recipe"
 description = "OpenRewrite recipes for managing PMD configuration."
 
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
