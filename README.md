@@ -25,15 +25,6 @@ This module provides OpenRewrite recipes for managing [PMD](https://pmd.github.i
 
 These recipes help you automate the setup and maintenance of PMD across your codebases — adding and upgrading the PMD build plugins, managing rulesets, and keeping PMD configuration consistent.
 
-### To do after generating your new module
-- [ ] Change the above description to reflect your module
-- [ ] Add to [dependency-vulnerability-reports](https://github.com/moderneinc/dependency-vulnerability-reports/blob/main/.github/workflows/openrewrite-vulnerability-analysis.yml)
-- [ ] Deploy to the Moderne Platform as recipe module, [here](https://app.moderne.io/recipes/deploy)
-- [ ] Add the module to the [release-bot](https://github.com/moderneinc/release-bot/blob/main/src/main/java/org/openrewrite/release/ReleaseOrder.java), with appropriate inter-project dependencies
-- [ ] [Add to rewrite-recipe-markdown-generator](https://github.com/openrewrite/rewrite-recipe-markdown-generator/commit/07361d8a3cdbfa3c7bc4a58e7e451028e9297db0) to generate recipe docs
-- [ ] [Add to rewrite-recipe-bom](https://github.com/openrewrite/rewrite-recipe-bom/commit/c13a444e37b6545c7e56c575e8846d063dda3d6f) to manage version for consumers, or [moderne-recipe-bom](https://github.com/moderneinc/moderne-recipe-bom/blob/main/build.gradle.kts) if proprietary
-- [ ] [Add the Moderne Release Notes Generator](https://github.com/organizations/moderneinc/settings/installations/88151565) to the project, such that releas notes get included in moderne-docs
-- [ ] Remove this to do list
 
 ## Contributing
 
