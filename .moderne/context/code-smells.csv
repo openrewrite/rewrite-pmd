@@ -1,0 +1,11 @@
+Source path,Class name,Method name,Smell type,Severity,Evidence
+src/main/java/org/openrewrite/java/pmd/AddPmdRule.java,org.openrewrite.java.pmd.AddPmdRule,visitDocument,FEATURE_ENVY,HIGH,"foreign accesses=16, own accesses=5"
+src/main/java/org/openrewrite/java/pmd/RemovePmdRule.java,org.openrewrite.java.pmd.RemovePmdRule,visitDocument,FEATURE_ENVY,LOW,"foreign accesses=5, own accesses=0"
+src/main/java/org/openrewrite/java/pmd/RemovePmdRule.java,org.openrewrite.java.pmd.RemovePmdRule,visitTag,FEATURE_ENVY,HIGH,"foreign accesses=18, own accesses=2"
+src/main/java/org/openrewrite/java/pmd/RemoveRulesetContentVisitor.java,org.openrewrite.java.pmd.RemoveRulesetContentVisitor,visitTag,FEATURE_ENVY,LOW,"foreign accesses=8, own accesses=1"
+src/main/java/org/openrewrite/java/pmd/ReplacePmdRule.java,org.openrewrite.java.pmd.ReplacePmdRule,replaceAttributeValue,FEATURE_ENVY,LOW,"foreign accesses=9, own accesses=0"
+src/main/java/org/openrewrite/java/pmd/ReplacePmdRule.java,org.openrewrite.java.pmd.ReplacePmdRule,visitDocument,FEATURE_ENVY,LOW,"foreign accesses=5, own accesses=0"
+src/main/java/org/openrewrite/java/pmd/ReplacePmdRule.java,org.openrewrite.java.pmd.ReplacePmdRule,visitTag,FEATURE_ENVY,HIGH,"foreign accesses=24, own accesses=7"
+src/test/java/org/openrewrite/java/pmd/ModernizePmdTest.java,org.openrewrite.java.pmd.ModernizePmdTest,defaults,FEATURE_ENVY,LOW,"foreign accesses=5, own accesses=0"
+src/test/java/org/openrewrite/java/pmd/Pmd6to7MigrationTest.java,org.openrewrite.java.pmd.Pmd6to7MigrationTest,defaults,FEATURE_ENVY,LOW,"foreign accesses=5, own accesses=0"
+src/test/java/org/openrewrite/java/pmd/Pmd7RuleRenamesTest.java,org.openrewrite.java.pmd.Pmd7RuleRenamesTest,defaults,FEATURE_ENVY,LOW,"foreign accesses=5, own accesses=0"

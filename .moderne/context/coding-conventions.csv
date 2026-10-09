@@ -1,3 +1,7 @@
 Convention type,Pattern,Example,Frequency,Scope
-naming,Test suffix for classes,RecipeLoadingTest,,project-wide
-naming,load* method naming pattern,loadRecipeFromFile,,project-wide
+naming,get* method naming pattern,getDisplayName,,project-wide
+comments,Classes have Javadoc documentation,PmdRuleRef,,project-wide
+comments,Methods have Javadoc documentation,matches,,project-wide
+imports,Static imports from org.assertj.core.api,org.assertj.core.api.Assertions.assertThat,,project-wide
+imports,Static imports from org.openrewrite.xml,org.openrewrite.xml.Assertions.xml,,project-wide
+naming,Test suffix for classes,AddPmdRuleTest,,project-wide

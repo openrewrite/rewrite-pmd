@@ -1,4 +1,7 @@
 Library,Top-level package,Usage pattern,Common classes,Import count,Example usage
-org.jspecify:jspecify:1.0.1,org.jspecify,,NullMarked,1,
-org.junit.jupiter:junit-jupiter-api:6.1.3,org.junit.jupiter,,"Disabled, Test",1,
-org.openrewrite:rewrite-test:8.90.0-SNAPSHOT,org.openrewrite,,RewriteTest,1,
+org.jspecify:jspecify:1.0.1,org.jspecify,,"NullMarked, Nullable",1,
+org.junit.jupiter:junit-jupiter-api:6.1.3,org.junit.jupiter,,Test,1,
+org.openrewrite:rewrite-core:8.93.0-SNAPSHOT,org.openrewrite,,"DocumentExample, TreeVisitor, Environment, ExecutionContext, Option, Recipe, Validated, ListUtils",1,
+org.openrewrite:rewrite-test:8.93.0-SNAPSHOT,org.openrewrite,,"RecipeSpec, RewriteTest",1,
+org.openrewrite:rewrite-xml:8.93.0-SNAPSHOT,org.openrewrite,,"XmlIsoVisitor, Xml, Xml.Tag, Xml.Document, AddToTagVisitor, RemoveContentVisitor, Xml.Attribute, Content",1,
+org.projectlombok:lombok:1.18.48,org.projectlombok,,"EqualsAndHashCode, Value",1,

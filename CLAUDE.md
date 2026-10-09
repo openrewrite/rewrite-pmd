@@ -218,18 +218,22 @@ Do NOT stop after reading a single context file when others are clearly relevant
 | Context | Description | Details |
 |---------|-------------|--------|
 | Class Quality Metrics | Per-class cohesion, coupling, and complexity measurements | [`class-quality-metrics.md`](.moderne/context/class-quality-metrics.md) |
+| Code Smells | Detected design problems with severity and evidence | [`code-smells.md`](.moderne/context/code-smells.md) |
 | Coding Conventions | Naming patterns, import organization, and coding style | [`coding-conventions.md`](.moderne/context/coding-conventions.md) |
 | Dependencies | Project dependencies including transitive dependencies | [`dependencies.md`](.moderne/context/dependencies.md) |
 | Library Usage | How external libraries and frameworks are used | [`library-usage.md`](.moderne/context/library-usage.md) |
 | Method Quality Metrics | Per-method complexity and quality measurements | [`method-quality-metrics.md`](.moderne/context/method-quality-metrics.md) |
 | Package Quality Metrics | Per-package coupling, stability, and dependency cycle analysis | [`package-quality-metrics.md`](.moderne/context/package-quality-metrics.md) |
-| Test Quality | Test quality issues that may cause flakiness or silent failures | [`test-quality.md`](.moderne/context/test-quality.md) |
+| Test Coverage | Maps test methods to implementation methods they verify | [`test-coverage.md`](.moderne/context/test-coverage.md) |
+| Test Gaps | Public non-trivial methods lacking test coverage | [`test-gaps.md`](.moderne/context/test-gaps.md) |
 
 ### Querying Context Files
 
 For .md context files: Read the full file in a single view call. Never grep it progressively.
 
 For .csv context files: Query with DuckDB, SQLite, or grep (from most to least preference).
+
+A large table may be split into pages named `<name>.csv`, `<name>-002.csv`, `<name>-003.csv`, and so on, each a standalone CSV with its own header row. Always query the whole table with the glob `<name>*.csv` (the table's `.md` file lists every page). DuckDB and grep accept the glob directly, and DuckDB skips the repeated per-page header; for SQLite, import each page.
 
 Upfront parallel reads: At the start of any architecture question, read all relevant context files in parallel rather than discovering which ones matter through iteration.
 
@@ -239,14 +243,14 @@ Use SQL to query CSV files efficiently. This returns only matching rows instead 
 DuckDB can query CSV files directly with no setup:
 
 ```bash
-# Find all POST endpoints
-duckdb -c "SELECT * FROM '.moderne/context/service-endpoints.csv' WHERE \"HTTP method\" = 'POST'"
+# Find all POST endpoints (the *.csv glob reads every page of a split table)
+duckdb -c "SELECT * FROM '.moderne/context/service-endpoints*.csv' WHERE \"HTTP method\" = 'POST'"
 
 # Find method descriptions containing a keyword
-duckdb -c "SELECT \"Class name\", Signature, Description FROM '.moderne/context/method-descriptions.csv' WHERE Description LIKE '%authentication%'"
+duckdb -c "SELECT \"Class name\", Signature, Description FROM '.moderne/context/method-descriptions*.csv' WHERE Description LIKE '%authentication%'"
 
 # Find tests for a specific class
-duckdb -c "SELECT \"Test method\", \"Test summary\" FROM '.moderne/context/test-mapping.csv' WHERE \"Implementation class\" LIKE '%OrderService%'"
+duckdb -c "SELECT \"Test method\", \"Test summary\" FROM '.moderne/context/test-mapping*.csv' WHERE \"Implementation class\" LIKE '%OrderService%'"
 ```
 
 #### Option 2: SQLite
@@ -257,11 +261,13 @@ sqlite3 :memory: -cmd ".mode csv" -cmd ".import .moderne/context/service-endpoin
   "SELECT * FROM endpoints WHERE [HTTP method] = 'POST'"
 ```
 
+For a split table, import each page into the same table; the first `.import` takes the header as column names, and each later page needs `--skip 1` to drop its repeated header. DuckDB's glob is simpler for paginated tables.
+
 #### Option 3: Grep (Last Resort)
 If SQL tools are unavailable, use grep. Note this loads more content into context:
 
 ```bash
-grep -i "POST" .moderne/context/service-endpoints.csv
+grep -i "POST" .moderne/context/service-endpoints*.csv
 ```
 
 **Note:** Column names with spaces require quoting - use double quotes in DuckDB (`"HTTP method"`) or square brackets in SQLite (`[HTTP method]`).

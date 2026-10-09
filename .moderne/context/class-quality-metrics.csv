@@ -1,2 +1,12 @@
 Source path,Class name,Line count,Method count,Field count,WMC,LCOM4,TCC,CBO,Maintainability index
-src/test/java/io/moderne/java/RecipeLoadingTest.java,io.moderne.java.RecipeLoadingTest,9,1,0,1,1,1.0,1,76.94186930306522
+src/main/java/org/openrewrite/java/pmd/AddPmdRule.java,org.openrewrite.java.pmd.AddPmdRule,66,5,1,24,4,0.1,11,57.95126546909313
+src/main/java/org/openrewrite/java/pmd/PmdRuleRef.java,org.openrewrite.java.pmd.PmdRuleRef,30,5,0,9,4,0.0,4,71.32122323621218
+src/main/java/org/openrewrite/java/pmd/RemovePmdRule.java,org.openrewrite.java.pmd.RemovePmdRule,57,5,1,27,5,0.0,10,58.85514133498661
+src/main/java/org/openrewrite/java/pmd/RemoveRulesetContentVisitor.java,org.openrewrite.java.pmd.RemoveRulesetContentVisitor,19,2,0,7,2,0.0,5,63.5598712712836
+src/main/java/org/openrewrite/java/pmd/ReplacePmdRule.java,org.openrewrite.java.pmd.ReplacePmdRule,83,6,2,40,6,0.0,13,55.657912005843556
+src/test/java/org/openrewrite/java/pmd/AddPmdRuleTest.java,org.openrewrite.java.pmd.AddPmdRuleTest,144,9,0,9,9,0.0,7,65.11461023925389
+src/test/java/org/openrewrite/java/pmd/ModernizePmdTest.java,org.openrewrite.java.pmd.ModernizePmdTest,121,5,0,5,5,0.0,5,60.34806463511623
+src/test/java/org/openrewrite/java/pmd/Pmd6to7MigrationTest.java,org.openrewrite.java.pmd.Pmd6to7MigrationTest,212,10,0,10,10,0.0,6,61.679198280658234
+src/test/java/org/openrewrite/java/pmd/Pmd7RuleRenamesTest.java,org.openrewrite.java.pmd.Pmd7RuleRenamesTest,184,8,0,8,8,0.0,5,61.24377888885903
+src/test/java/org/openrewrite/java/pmd/RemovePmdRuleTest.java,org.openrewrite.java.pmd.RemovePmdRuleTest,174,9,0,9,9,0.0,4,63.07379348739367
+src/test/java/org/openrewrite/java/pmd/ReplacePmdRuleTest.java,org.openrewrite.java.pmd.ReplacePmdRuleTest,213,11,0,11,11,0.0,4,62.08079491624799
