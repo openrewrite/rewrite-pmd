@@ -37,17 +37,11 @@ public class AddPmdRule extends Recipe {
             example = "category/java/errorprone.xml/EmptyCatchBlock")
     String rule;
 
-    @Override
-    public String getDisplayName() {
-        return "Add a PMD rule to a ruleset";
-    }
+    String displayName = "Add a PMD rule to a ruleset";
 
-    @Override
-    public String getDescription() {
-        return "Adds a `<rule ref=\"...\"/>` reference to PMD ruleset XML files that do not have one yet. When the " +
-               "ruleset already pulls in the whole ruleset file the rule lives in, the rule is enabled by removing the " +
-               "`<exclude name=\"...\"/>` that was keeping it out rather than by adding a second reference to it.";
-    }
+    String description = "Adds a `<rule ref=\"...\"/>` reference to PMD ruleset XML files that do not have one yet. When the " +
+           "ruleset already pulls in the whole ruleset file the rule lives in, the rule is enabled by removing the " +
+           "`<exclude name=\"...\"/>` that was keeping it out rather than by adding a second reference to it.";
 
     @Override
     public Validated<Object> validate() {

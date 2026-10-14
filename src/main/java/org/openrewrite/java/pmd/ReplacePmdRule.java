@@ -42,19 +42,13 @@ public class ReplacePmdRule extends Recipe {
             example = "ImplicitSwitchFallThrough")
     String newRule;
 
-    @Override
-    public String getDisplayName() {
-        return "Replace a PMD rule in a ruleset";
-    }
+    String displayName = "Replace a PMD rule in a ruleset";
 
-    @Override
-    public String getDescription() {
-        return "Updates `<rule ref=\"...\"/>` references and `<exclude name=\"...\"/>` elements in PMD ruleset XML files to " +
-               "name a rule's replacement. An `<exclude>` is only renamed when the replacement lives in the same ruleset " +
-               "file, because an exclusion can only name a rule from the ruleset its enclosing `<rule>` refers to; when " +
-               "the replacement moved to another ruleset file the exclusion no longer names a rule PMD knows, so it is " +
-               "removed instead.";
-    }
+    String description = "Updates `<rule ref=\"...\"/>` references and `<exclude name=\"...\"/>` elements in PMD ruleset XML files to " +
+           "name a rule's replacement. An `<exclude>` is only renamed when the replacement lives in the same ruleset " +
+           "file, because an exclusion can only name a rule from the ruleset its enclosing `<rule>` refers to; when " +
+           "the replacement moved to another ruleset file the exclusion no longer names a rule PMD knows, so it is " +
+           "removed instead.";
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {

@@ -35,17 +35,11 @@ public class RemovePmdRule extends Recipe {
             example = "category/java/codestyle.xml/AvoidFinalLocalVariable")
     String rule;
 
-    @Override
-    public String getDisplayName() {
-        return "Remove a PMD rule from a ruleset";
-    }
+    String displayName = "Remove a PMD rule from a ruleset";
 
-    @Override
-    public String getDescription() {
-        return "Removes both `<rule ref=\"...\"/>` references to a rule and `<exclude name=\"...\"/>` elements naming it " +
-               "from PMD ruleset XML files. Intended for rules that PMD deleted without offering a replacement, since " +
-               "PMD fails to load a ruleset that references a rule it does not know.";
-    }
+    String description = "Removes both `<rule ref=\"...\"/>` references to a rule and `<exclude name=\"...\"/>` elements naming it " +
+           "from PMD ruleset XML files. Intended for rules that PMD deleted without offering a replacement, since " +
+           "PMD fails to load a ruleset that references a rule it does not know.";
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
