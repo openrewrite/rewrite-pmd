@@ -81,7 +81,6 @@ class Pmd6to7MigrationTest implements RewriteTest {
               <?xml version="1.0"?>
               <ruleset name="custom">
                   <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
-                  <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
               </ruleset>
               """
           )
