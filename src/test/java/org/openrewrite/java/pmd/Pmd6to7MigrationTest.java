@@ -67,6 +67,54 @@ class Pmd6to7MigrationTest implements RewriteTest {
     }
 
     @Test
+    void migrateAssertionRules() {
+        rewriteRun(
+          xml(
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/bestpractices.xml/UseAssertNullInsteadOfAssertTrue"/>
+                  <rule ref="category/java/bestpractices.xml/UseAssertSameInsteadOfAssertTrue"/>
+              </ruleset>
+              """,
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
+                  <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void migrateAssertionRuleExclusions() {
+        rewriteRun(
+          xml(
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/bestpractices.xml">
+                      <exclude name="UseAssertNullInsteadOfAssertTrue"/>
+                      <exclude name="UseAssertSameInsteadOfAssertTrue"/>
+                  </rule>
+              </ruleset>
+              """,
+            """
+              <?xml version="1.0"?>
+              <ruleset name="custom">
+                  <rule ref="category/java/bestpractices.xml">
+                      <exclude name="SimplifiableTestAssertion"/>
+                      <exclude name="SimplifiableTestAssertion"/>
+                  </rule>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
     void migrateExclusions() {
         rewriteRun(
           //language=xml
