@@ -99,6 +99,29 @@ class Pmd7RuleRenamesTest implements RewriteTest {
     }
 
     @Test
+    void mergeRenamedRuleWithExistingSuccessor() {
+        rewriteRun(
+          xml(
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/design.xml/UseUtilityClass">
+                      <priority>2</priority>
+                  </rule>
+                  <rule ref="category/java/design.xml/InstantiableUtilityClass"/>
+              </ruleset>
+              """,
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/design.xml/InstantiableUtilityClass">
+                      <priority>2</priority>
+                  </rule>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
     void renameExclusions() {
         rewriteRun(
           //language=xml

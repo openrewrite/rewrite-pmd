@@ -185,6 +185,7 @@ recipeList:
       rule: category/java/performance.xml/AvoidUsingShortType
   - org.openrewrite.java.pmd.RemovePmdRule:
       rule: category/java/performance.xml/SimplifyStartsWith
+  - org.openrewrite.java.pmd.DeduplicatePmdRules
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
@@ -246,3 +247,4 @@ recipeList:
   - org.openrewrite.java.pmd.ReplacePmdRule:
       oldRule: category/java/design.xml/UseUtilityClass
       newRule: InstantiableUtilityClass
+  - org.openrewrite.java.pmd.DeduplicatePmdRules
