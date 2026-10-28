@@ -20,6 +20,7 @@ import lombok.Value;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
+import org.openrewrite.internal.ListUtils;
 import org.openrewrite.xml.XmlIsoVisitor;
 import org.openrewrite.xml.tree.Content;
 import org.openrewrite.xml.tree.Xml;
@@ -27,18 +28,20 @@ import org.openrewrite.xml.tree.Xml;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class DeduplicatePmdRules extends Recipe {
     String displayName = "Deduplicate PMD rule references";
 
-    String description = "Merges duplicate references to individual rules in PMD ruleset XML files, keeping the first " +
-            "reference's position and combining explicit configuration. Later explicit values take precedence for " +
-            "conflicting properties, attributes, descriptions and priorities. Whole-ruleset imports are left alone " +
-            "because their exclusions may enable different rules.";
+    String description = "Merges duplicate references to individual rules in PMD ruleset XML files, keeping the last " +
+            "reference's position and combining explicit configuration. Values explicitly configured in later references " +
+            "take precedence for conflicting properties, attributes, descriptions and priorities. Whole-ruleset imports " +
+            "are left alone because their exclusions may enable different rules.";
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
@@ -51,25 +54,29 @@ public class DeduplicatePmdRules extends Recipe {
                 }
                 List<Content> content = new ArrayList<>();
                 Map<List<String>, Integer> references = new HashMap<>();
-                boolean changed = false;
+                Set<Integer> removed = new HashSet<>();
                 for (Content child : root.getContent()) {
                     if (child instanceof Xml.Tag && "rule".equals(((Xml.Tag) child).getName())) {
                         Xml.Tag rule = (Xml.Tag) child;
                         String ref = PmdRuleRef.attributeValue(rule, "ref");
                         if (ref != null && !ref.endsWith(".xml")) {
                             String name = PmdRuleRef.attributeValue(rule, "name");
-                            Integer index = references.putIfAbsent(
+                            Integer index = references.put(
                                     Arrays.asList(ref, name == null ? PmdRuleRef.name(ref) : name), content.size());
                             if (index != null) {
-                                content.set(index, merge((Xml.Tag) content.get(index), rule));
-                                changed = true;
+                                content.add(merge((Xml.Tag) content.get(index), rule).withPrefix(rule.getPrefix()));
+                                removed.add(index);
                                 continue;
                             }
                         }
                     }
                     content.add(child);
                 }
-                return changed ? document.withRoot(root.withContent(content)) : document;
+                if (removed.isEmpty()) {
+                    return document;
+                }
+                return document.withRoot(root.withContent(ListUtils.map(content,
+                        (index, child) -> removed.contains(index) ? null : child)));
             }
         };
     }
@@ -99,6 +106,7 @@ public class DeduplicatePmdRules extends Recipe {
         }
         List<String> order = Arrays.asList("description", "priority", "properties", "exclude", "example");
         List<Content> pending = new ArrayList<>();
+        Set<String> propertyNames = new HashSet<>();
         for (Content child : later.getContent()) {
             if (!(child instanceof Xml.Tag)) {
                 pending.add(child);
@@ -106,6 +114,11 @@ public class DeduplicatePmdRules extends Recipe {
             }
             Xml.Tag tag = (Xml.Tag) child;
             String name = tag.getName();
+            String propertyName = PmdRuleRef.attributeValue(tag, "name");
+            if ("properties".equals(first.getName()) && "property".equals(name) &&
+                propertyName != null && !propertyNames.add(propertyName)) {
+                continue;
+            }
             int index = 0;
             for (; index < content.size(); index++) {
                 if (!(content.get(index) instanceof Xml.Tag)) {
@@ -114,8 +127,8 @@ public class DeduplicatePmdRules extends Recipe {
                 Xml.Tag existing = (Xml.Tag) content.get(index);
                 if (name.equals(existing.getName()) &&
                     ("properties".equals(name) || "priority".equals(name) || "description".equals(name) ||
-                     "property".equals(name) && PmdRuleRef.attributeValue(tag, "name") != null &&
-                     PmdRuleRef.attributeValue(tag, "name").equals(PmdRuleRef.attributeValue(existing, "name")))) {
+                     "property".equals(name) && propertyName != null &&
+                     propertyName.equals(PmdRuleRef.attributeValue(existing, "name")))) {
                     content.addAll(index, pending);
                     index += pending.size();
                     pending.clear();

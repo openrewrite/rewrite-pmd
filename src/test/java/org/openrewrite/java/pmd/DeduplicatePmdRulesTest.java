@@ -31,7 +31,7 @@ class DeduplicatePmdRulesTest implements RewriteTest {
 
     @DocumentExample
     @Test
-    void deduplicateReferencesKeepingPositionAndComments() {
+    void deduplicateReferencesKeepingLastPositionAndComments() {
         rewriteRun(
           xml(
             """
@@ -46,10 +46,75 @@ class DeduplicatePmdRulesTest implements RewriteTest {
               """,
             """
               <ruleset name="custom">
-                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
                   <!-- Other rules -->
                   <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
                   <!-- More braces -->
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void preserveOverrideOrderAcrossRulesets() {
+        rewriteRun(
+          xml(
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <properties>
+                          <property name="checkIfStmt" value="false"/>
+                      </properties>
+                  </rule>
+                  <rule ref="mycorp/rules.xml/ControlStatementBraces"/>
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <priority>2</priority>
+                  </rule>
+              </ruleset>
+              """,
+            """
+              <ruleset name="custom">
+                  <rule ref="mycorp/rules.xml/ControlStatementBraces"/>
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <priority>2</priority>
+                      <properties>
+                          <property name="checkIfStmt" value="false"/>
+                      </properties>
+                  </rule>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void preserveFirstPropertyValueWithinEachReference() {
+        rewriteRun(
+          xml(
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <properties>
+                          <property name="checkWhileStmt" value="false"/>
+                      </properties>
+                  </rule>
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <properties>
+                          <property name="checkIfStmt" value="false"/>
+                          <property name="checkIfStmt" value="true"/>
+                      </properties>
+                  </rule>
+              </ruleset>
+              """,
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <properties>
+                          <property name="checkWhileStmt" value="false"/>
+                          <property name="checkIfStmt" value="false"/>
+                      </properties>
+                  </rule>
               </ruleset>
               """
           )
