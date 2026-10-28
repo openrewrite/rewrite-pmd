@@ -81,7 +81,6 @@ class Pmd6to7MigrationTest implements RewriteTest {
               <?xml version="1.0"?>
               <ruleset name="custom">
                   <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
-                  <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
               </ruleset>
               """
           )
@@ -162,8 +161,76 @@ class Pmd6to7MigrationTest implements RewriteTest {
               <?xml version="1.0"?>
               <ruleset name="custom">
                   <rule ref="category/java/codestyle.xml/EmptyControlStatement"/>
-                  <rule ref="category/java/codestyle.xml/EmptyControlStatement"/>
                   <rule ref="category/java/codestyle.xml/UnnecessarySemicolon"/>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void mergeRulesReplacedByControlStatementBraces() {
+        rewriteRun(
+          xml(
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml/IfStmtsMustUseBraces">
+                      <properties>
+                          <property name="checkIfStmt" value="false"/>
+                      </properties>
+                  </rule>
+                  <rule ref="category/java/codestyle.xml/WhileLoopsMustUseBraces"/>
+                  <rule ref="category/java/codestyle.xml/ForLoopsMustUseBraces"/>
+                  <rule ref="category/java/codestyle.xml/IfElseStmtsMustUseBraces"/>
+              </ruleset>
+              """,
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/codestyle.xml/ControlStatementBraces">
+                      <properties>
+                          <property name="checkIfStmt" value="false"/>
+                      </properties>
+                  </rule>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
+    void mergePropertiesInDocumentOrderAfterAllReplacements() {
+        rewriteRun(
+          xml(
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/design.xml/ExcessiveClassLength">
+                      <properties>
+                          <property name="classReportLevel" value="1000"/>
+                      </properties>
+                  </rule>
+                  <rule ref="category/java/design.xml/NcssTypeCount">
+                      <priority>2</priority>
+                      <properties>
+                          <property name="classReportLevel" value="1500"/>
+                          <property name="methodReportLevel" value="50"/>
+                      </properties>
+                  </rule>
+                  <rule ref="category/java/design.xml/NcssCount">
+                      <properties>
+                          <property name="classReportLevel" value="2000"/>
+                      </properties>
+                  </rule>
+              </ruleset>
+              """,
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/design.xml/NcssCount">
+                      <priority>2</priority>
+                      <properties>
+                          <property name="classReportLevel" value="2000"/>
+                          <property name="methodReportLevel" value="50"/>
+                      </properties>
+                  </rule>
               </ruleset>
               """
           )
