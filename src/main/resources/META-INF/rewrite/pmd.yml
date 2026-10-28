@@ -54,10 +54,10 @@ recipeList:
       oldRule: category/java/bestpractices.xml/UseAssertEqualsInsteadOfAssertTrue
       newRule: SimplifiableTestAssertion
   - org.openrewrite.java.pmd.ReplacePmdRule:
-      oldRule: category/java/bestpractices.xml/UseAssertNullInsteadOfAssertEquals
+      oldRule: category/java/bestpractices.xml/UseAssertNullInsteadOfAssertTrue
       newRule: SimplifiableTestAssertion
   - org.openrewrite.java.pmd.ReplacePmdRule:
-      oldRule: category/java/bestpractices.xml/UseAssertSameInsteadOfAssertEquals
+      oldRule: category/java/bestpractices.xml/UseAssertSameInsteadOfAssertTrue
       newRule: SimplifiableTestAssertion
   - org.openrewrite.java.pmd.ReplacePmdRule:
       oldRule: category/java/bestpractices.xml/UseAssertTrueInsteadOfAssertEquals
