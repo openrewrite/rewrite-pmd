@@ -24,7 +24,7 @@ description: >-
   deleted and drops the ones deleted without a successor, and the PMD 7 rule renames, which adopt the current name of
   each rule PMD renamed within the PMD 7 line. Rules whose replacement requires a judgement call, either because PMD
   split one rule across several successors or because the successor reports something different, are left alone. The
-  result requires PMD 7.27.0 or later; an earlier PMD 7 fails to load a name that its version does not know yet.
+  result requires PMD 7.29.0 or later; an earlier PMD 7 fails to load a name that its version does not know yet.
 recipeList:
   - org.openrewrite.java.pmd.Pmd6to7Migration
   - org.openrewrite.java.pmd.Pmd7RuleRenames
@@ -201,7 +201,7 @@ description: >-
   `UnnecessaryLocalBeforeReturn` in favour of `VariableCanBeInlined`, `UseObjectForClearerAPI` in favour of
   `ExcessiveParameterList`, and `CheckSkipResult`, `AvoidLosingExceptionInformation` and `UselessOperationOnImmutable` in
   favour of `UnusedReturnValue`, are left alone, because the successor reports different things and adopting it is a
-  judgement call rather than a rename. The new names require PMD 7.27.0 or later; a ruleset for an earlier PMD 7 fails to
+  judgement call rather than a rename. The new names require PMD 7.29.0 or later; a ruleset for an earlier PMD 7 fails to
   load a name that its version does not know yet.
 recipeList:
   # Renamed in PMD 7.7.0
@@ -247,4 +247,11 @@ recipeList:
   - org.openrewrite.java.pmd.ReplacePmdRule:
       oldRule: category/java/design.xml/UseUtilityClass
       newRule: InstantiableUtilityClass
+  # Renamed in PMD 7.29.0
+  - org.openrewrite.java.pmd.ReplacePmdRule:
+      oldRule: category/java/bestpractices.xml/ReplaceVectorWithList
+      newRule: category/java/bestpractices.xml/ReplaceJavaUtilVector
+  - org.openrewrite.java.pmd.ReplacePmdRule:
+      oldRule: category/java/performance.xml/UseArrayListInsteadOfVector
+      newRule: category/java/bestpractices.xml/ReplaceJavaUtilVector
   - org.openrewrite.java.pmd.DeduplicatePmdRules

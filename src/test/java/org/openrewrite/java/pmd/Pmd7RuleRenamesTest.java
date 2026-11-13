@@ -122,6 +122,26 @@ class Pmd7RuleRenamesTest implements RewriteTest {
     }
 
     @Test
+    void renameVectorRulesToReplaceJavaUtilVector() {
+        rewriteRun(
+          //language=xml
+          xml(
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/bestpractices.xml/ReplaceVectorWithList"/>
+                  <rule ref="category/java/performance.xml/UseArrayListInsteadOfVector"/>
+              </ruleset>
+              """,
+            """
+              <ruleset name="custom">
+                  <rule ref="category/java/bestpractices.xml/ReplaceJavaUtilVector"/>
+              </ruleset>
+              """
+          )
+        );
+    }
+
+    @Test
     void renameExclusions() {
         rewriteRun(
           //language=xml
