@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.pmd;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -102,68 +103,72 @@ class AddPmdRuleTest implements RewriteTest {
     }
 
     @Test
-    void doNotChangeRulesetThatAlreadyReferencesRule() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml/EmptyCatchBlock">
-                      <priority>2</priority>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
-
-    @Test
-    void doNotChangeRulesetThatReferencesWholeRulesetFile() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml">
-                      <exclude name="MissingSerialVersionUID"/>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
-
-    @Test
-    void doNotChangeXmlWithoutRootElement() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <!-- just a comment, no root element -->
-              """
-          )
-        );
-    }
-
-    @Test
-    void doNotChangeNonRulesetXml() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <project>
-                  <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
-              </project>
-              """
-          )
-        );
-    }
-
-    @Test
     void bareRuleNameIsInvalid() {
         assertThat(new AddPmdRule("EmptyCatchBlock").validate().isValid()).isFalse();
+    }
+
+    @Nested
+    class NoChange {
+
+        @Test
+        void doNotChangeRulesetThatAlreadyReferencesRule() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="category/java/errorprone.xml/EmptyCatchBlock">
+                          <priority>2</priority>
+                      </rule>
+                  </ruleset>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotChangeRulesetThatReferencesWholeRulesetFile() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="category/java/errorprone.xml">
+                          <exclude name="MissingSerialVersionUID"/>
+                      </rule>
+                  </ruleset>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotChangeXmlWithoutRootElement() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <!-- just a comment, no root element -->
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotChangeNonRulesetXml() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <project>
+                      <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

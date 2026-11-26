@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.pmd;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -203,55 +204,59 @@ class DeduplicatePmdRulesTest implements RewriteTest {
         );
     }
 
-    @Test
-    void doNotMergeWholeRulesetImportsOrDistinctRules() {
-        rewriteRun(
-          xml(
-            """
-              <ruleset name="custom">
-                  <rule ref="category/java/codestyle.xml">
-                      <exclude name="ControlStatementBraces"/>
-                  </rule>
-                  <rule ref="category/java/codestyle.xml">
-                      <exclude name="UnnecessaryImport"/>
-                  </rule>
-                  <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
-                  <rule ref="mycorp/rules.xml/ControlStatementBraces"/>
-                  <rule ref="category/java/codestyle.xml/ControlStatementBraces" name="CustomBraces"/>
-                  <rule name="ControlStatementBraces" class="mycorp.CustomRule"/>
-              </ruleset>
-              """
-          )
-        );
-    }
+    @Nested
+    class NoChange {
 
-    @Test
-    void doNotChangeNonRulesetXml() {
-        rewriteRun(
-          xml(
-            """
-              <project>
-                  <ruleset>
+        @Test
+        void doNotMergeWholeRulesetImportsOrDistinctRules() {
+            rewriteRun(
+              xml(
+                """
+                  <ruleset name="custom">
+                      <rule ref="category/java/codestyle.xml">
+                          <exclude name="ControlStatementBraces"/>
+                      </rule>
+                      <rule ref="category/java/codestyle.xml">
+                          <exclude name="UnnecessaryImport"/>
+                      </rule>
                       <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
-                      <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+                      <rule ref="mycorp/rules.xml/ControlStatementBraces"/>
+                      <rule ref="category/java/codestyle.xml/ControlStatementBraces" name="CustomBraces"/>
+                      <rule name="ControlStatementBraces" class="mycorp.CustomRule"/>
                   </ruleset>
-              </project>
-              """
-          )
-        );
-    }
+                  """
+              )
+            );
+        }
 
-    @Test
-    void doNotChangeXmlWithoutRootElement() {
-        rewriteRun(
-          xml("<!-- No root element -->")
-        );
-    }
+        @Test
+        void doNotChangeNonRulesetXml() {
+            rewriteRun(
+              xml(
+                """
+                  <project>
+                      <ruleset>
+                          <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+                          <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+                      </ruleset>
+                  </project>
+                  """
+              )
+            );
+        }
 
-    @Test
-    void doNotChangeEmptyRuleset() {
-        rewriteRun(
-          xml("<ruleset/>")
-        );
+        @Test
+        void doNotChangeXmlWithoutRootElement() {
+            rewriteRun(
+              xml("<!-- No root element -->")
+            );
+        }
+
+        @Test
+        void doNotChangeEmptyRuleset() {
+            rewriteRun(
+              xml("<ruleset/>")
+            );
+        }
     }
 }

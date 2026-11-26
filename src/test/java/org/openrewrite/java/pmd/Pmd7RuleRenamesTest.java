@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.pmd;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.config.Environment;
@@ -195,58 +196,62 @@ class Pmd7RuleRenamesTest implements RewriteTest {
         );
     }
 
-    @Test
-    void doNotChangeRulesetThatAlreadyUsesTheCurrentNames() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/bestpractices.xml/JUnitJupiterTestShouldBePackagePrivate"/>
-                  <rule ref="category/java/bestpractices.xml/NonExhaustiveSwitch"/>
-                  <rule ref="category/java/design.xml/InstantiableUtilityClass"/>
-                  <rule ref="category/java/errorprone.xml/AvoidCatchingGenericException"/>
-                  <rule ref="category/java/bestpractices.xml">
-                      <exclude name="DefaultLabelNotLastInSwitch"/>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
+    @Nested
+    class NoChange {
 
-    @Test
-    void doNotAdoptASuccessorRuleThatReportsSomethingElse() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/errorprone.xml/AvoidCatchingNPE"/>
-                  <rule ref="category/java/errorprone.xml/CheckSkipResult"/>
-                  <rule ref="category/java/codestyle.xml/GenericsNaming"/>
-                  <rule ref="category/java/codestyle.xml/UnnecessaryLocalBeforeReturn"/>
-                  <rule ref="category/java/design.xml/UseObjectForClearerAPI"/>
-              </ruleset>
-              """
-          )
-        );
-    }
+        @Test
+        void doNotChangeRulesetThatAlreadyUsesTheCurrentNames() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="category/java/bestpractices.xml/JUnitJupiterTestShouldBePackagePrivate"/>
+                      <rule ref="category/java/bestpractices.xml/NonExhaustiveSwitch"/>
+                      <rule ref="category/java/design.xml/InstantiableUtilityClass"/>
+                      <rule ref="category/java/errorprone.xml/AvoidCatchingGenericException"/>
+                      <rule ref="category/java/bestpractices.xml">
+                          <exclude name="DefaultLabelNotLastInSwitch"/>
+                      </rule>
+                  </ruleset>
+                  """
+              )
+            );
+        }
 
-    @Test
-    void doNotRenameARuleThatOnlyLooksLikeAPmdRule() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="mycorp/rules.xml/UseUtilityClass"/>
-              </ruleset>
-              """
-          )
-        );
+        @Test
+        void doNotAdoptASuccessorRuleThatReportsSomethingElse() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="category/java/errorprone.xml/AvoidCatchingNPE"/>
+                      <rule ref="category/java/errorprone.xml/CheckSkipResult"/>
+                      <rule ref="category/java/codestyle.xml/GenericsNaming"/>
+                      <rule ref="category/java/codestyle.xml/UnnecessaryLocalBeforeReturn"/>
+                      <rule ref="category/java/design.xml/UseObjectForClearerAPI"/>
+                  </ruleset>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotRenameARuleThatOnlyLooksLikeAPmdRule() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="mycorp/rules.xml/UseUtilityClass"/>
+                  </ruleset>
+                  """
+              )
+            );
+        }
     }
 }
