@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.pmd;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.config.Environment;
@@ -238,91 +239,6 @@ class Pmd6to7MigrationTest implements RewriteTest {
     }
 
     @Test
-    void doNotChangeRulesetThatIsAlreadyOnPmd7() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/codestyle.xml/UnnecessaryImport"/>
-                  <rule ref="category/java/errorprone.xml/ImplicitSwitchFallThrough"/>
-                  <rule ref="category/java/design.xml">
-                      <exclude name="NcssCount"/>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
-
-    @Test
-    void doNotGuessWhenPmdSplitARuleAcrossSeveralSuccessors() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="category/java/codestyle.xml/VariableNamingConventions"/>
-                  <rule ref="category/java/performance.xml/IntegerInstantiation"/>
-              </ruleset>
-              """
-          )
-        );
-    }
-
-    @Test
-    void noChanges_on_empty_ruleset() {
-        //language=java
-        rewriteRun(
-          xml(
-            """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <ruleset name="exampleruleset"
-                     xmlns="http://sourceforge.net"
-                     xmlns:xsi="http://w3.org"
-                     xsi:schemaLocation="http://sourceforge.net https://sourceforge.net">
-                <description>This is a description</description>
-            </ruleset>
-            """
-          ));
-    }
-
-    @Test
-    void preserve_custom_rule() {
-        //language=java
-        rewriteRun(
-          xml(
-            """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <ruleset name="exampleruleset"
-                     xmlns="http://sourceforge.net"
-                     xmlns:xsi="http://w3.org"
-                     xsi:schemaLocation="http://sourceforge.net https://sourceforge.net">
-                <description>This is a description</description>
-                <rule ref="mycorp/MyCustomRule" />
-            </ruleset>
-            """
-          ));
-    }
-
-    @Test
-    void leaveRulesetTagThatIsNotTheDocumentRoot() {
-        rewriteRun(
-          xml(
-            """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <configuration>
-                <ruleset name="notpmd">
-                    <rule ref="category/java/errorprone.xml/DontImportSun" />
-                </ruleset>
-            </configuration>
-            """
-          ));
-    }
-
-    @Test
     void removeStaleExclusionWhenReplacementMovesToAnotherRuleset() {
         rewriteRun(
           spec -> spec.recipe(new ReplacePmdRule(
@@ -348,5 +264,94 @@ class Pmd6to7MigrationTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Nested
+    class NoChange {
+
+        @Test
+        void doNotChangeRulesetThatIsAlreadyOnPmd7() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="category/java/codestyle.xml/UnnecessaryImport"/>
+                      <rule ref="category/java/errorprone.xml/ImplicitSwitchFallThrough"/>
+                      <rule ref="category/java/design.xml">
+                          <exclude name="NcssCount"/>
+                      </rule>
+                  </ruleset>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotGuessWhenPmdSplitARuleAcrossSeveralSuccessors() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="category/java/codestyle.xml/VariableNamingConventions"/>
+                      <rule ref="category/java/performance.xml/IntegerInstantiation"/>
+                  </ruleset>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void noChanges_on_empty_ruleset() {
+            //language=java
+            rewriteRun(
+              xml(
+                """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <ruleset name="exampleruleset"
+                         xmlns="http://sourceforge.net"
+                         xmlns:xsi="http://w3.org"
+                         xsi:schemaLocation="http://sourceforge.net https://sourceforge.net">
+                    <description>This is a description</description>
+                </ruleset>
+                """
+              ));
+        }
+
+        @Test
+        void preserve_custom_rule() {
+            //language=java
+            rewriteRun(
+              xml(
+                """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <ruleset name="exampleruleset"
+                         xmlns="http://sourceforge.net"
+                         xmlns:xsi="http://w3.org"
+                         xsi:schemaLocation="http://sourceforge.net https://sourceforge.net">
+                    <description>This is a description</description>
+                    <rule ref="mycorp/MyCustomRule" />
+                </ruleset>
+                """
+              ));
+        }
+
+        @Test
+        void leaveRulesetTagThatIsNotTheDocumentRoot() {
+            rewriteRun(
+              xml(
+                """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <configuration>
+                    <ruleset name="notpmd">
+                        <rule ref="category/java/errorprone.xml/DontImportSun" />
+                    </ruleset>
+                </configuration>
+                """
+              ));
+        }
     }
 }

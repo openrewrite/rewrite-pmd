@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.pmd;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -176,62 +177,66 @@ class ReplacePmdRuleTest implements RewriteTest {
         );
     }
 
-    @Test
-    void doNotChangeRuleReferencedFromAnotherRuleset() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="rulesets/java/mine.xml/MissingBreakInSwitch"/>
-              </ruleset>
-              """
-          )
-        );
-    }
+    @Nested
+    class NoChange {
 
-    @Test
-    void doNotChangeCustomRuleDefinedInPlace() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule name="MissingBreakInSwitch" language="java" class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
-                      <description>My own take on it</description>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
+        @Test
+        void doNotChangeRuleReferencedFromAnotherRuleset() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="rulesets/java/mine.xml/MissingBreakInSwitch"/>
+                  </ruleset>
+                  """
+              )
+            );
+        }
 
-    @Test
-    void doNotChangeXmlWithoutRootElement() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <!-- just a comment, no root element -->
-              """
-          )
-        );
-    }
+        @Test
+        void doNotChangeCustomRuleDefinedInPlace() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule name="MissingBreakInSwitch" language="java" class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+                          <description>My own take on it</description>
+                      </rule>
+                  </ruleset>
+                  """
+              )
+            );
+        }
 
-    @Test
-    void doNotChangeNonRulesetXml() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <project>
-                  <rule ref="category/java/errorprone.xml/MissingBreakInSwitch"/>
-              </project>
-              """
-          )
-        );
+        @Test
+        void doNotChangeXmlWithoutRootElement() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <!-- just a comment, no root element -->
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotChangeNonRulesetXml() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <project>
+                      <rule ref="category/java/errorprone.xml/MissingBreakInSwitch"/>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.pmd;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -151,48 +152,52 @@ class RemovePmdRuleTest implements RewriteTest {
         );
     }
 
-    @Test
-    void doNotRemoveWhenReferencedFromAnotherRuleset() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <ruleset name="custom">
-                  <rule ref="rulesets/java/mine.xml/AvoidFinalLocalVariable"/>
-                  <rule ref="rulesets/java/mine.xml">
-                      <exclude name="AvoidFinalLocalVariable"/>
-                  </rule>
-              </ruleset>
-              """
-          )
-        );
-    }
+    @Nested
+    class NoChange {
 
-    @Test
-    void doNotChangeXmlWithoutRootElement() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <!-- just a comment, no root element -->
-              """
-          )
-        );
-    }
+        @Test
+        void doNotRemoveWhenReferencedFromAnotherRuleset() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <ruleset name="custom">
+                      <rule ref="rulesets/java/mine.xml/AvoidFinalLocalVariable"/>
+                      <rule ref="rulesets/java/mine.xml">
+                          <exclude name="AvoidFinalLocalVariable"/>
+                      </rule>
+                  </ruleset>
+                  """
+              )
+            );
+        }
 
-    @Test
-    void doNotChangeNonRulesetXml() {
-        rewriteRun(
-          //language=xml
-          xml(
-            """
-              <?xml version="1.0"?>
-              <project>
-                  <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable"/>
-              </project>
-              """
-          )
-        );
+        @Test
+        void doNotChangeXmlWithoutRootElement() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <!-- just a comment, no root element -->
+                  """
+              )
+            );
+        }
+
+        @Test
+        void doNotChangeNonRulesetXml() {
+            rewriteRun(
+              //language=xml
+              xml(
+                """
+                  <?xml version="1.0"?>
+                  <project>
+                      <rule ref="category/java/codestyle.xml/AvoidFinalLocalVariable"/>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }
